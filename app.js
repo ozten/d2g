@@ -29,6 +29,12 @@ var secrets = require('./config/secrets');
 var passportConf = require('./config/passport');
 
 /**
+ * Generate signing keys on demand.
+ */
+require('./lib/first_run');
+
+
+/**
  * Create Express server.
  */
 
@@ -105,6 +111,10 @@ app.use(express.errorHandler());
 // Home
 
 app.get('/', homeController.getIndex);
+app.get('/cert', homeController.getPhoneCert);
+app.get('/get-certs', homeController.getPhoneCertInstructions);
+app.get('/get-certs-tools', homeController.getPhoneCertTools);
+
 
 // User
 
@@ -116,14 +126,11 @@ app.post('/account/delete', passportConf.isAuthenticated, userController.postDel
 app.get('/account/unlink/:provider', passportConf.isAuthenticated, userController.getOauthUnlink);
 
 // Manage
-
-app.get('/manage', manageController.getIndex);
-// app.get('/manage/project', manageController.getNewProject);
-app.post('/manage/project', manageController.uploadApp);
-// app.post('/manage/project', manageController.postNewProject);
-app.get('/manage/project/:id', manageController.getProject);
-// app.get('/manage/project/:project_id/build', manageController.getNewBuild);
-// app.get('/manage/project/:project_id/build/:build_id', manageController.getBuild);
+app.get('/manage', passportConf.isAuthenticated, manageController.getIndex);
+app.post('/manage/project', passportConf.isAuthenticated, manageController.uploadApp);
+app.get('/manage/project', passportConf.isAuthenticated, manageController.getProjects);
+app.post('/manage/project/:project_id', passportConf.isAuthenticated, manageController.uploadApp);
+app.post('/manage/project', passportConf.isAuthenticated, manageController.uploadApp);
 
 // OAuth
 
