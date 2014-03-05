@@ -33,13 +33,6 @@ var passportConf = require('./lib/passport');
  */
 require('./lib/first_run');
 
-
-/**
- * Generate signing keys on demand.
- */
-require('./lib/first_run');
-
-
 /**
  * Create Express server.
  */
