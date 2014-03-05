@@ -31,59 +31,59 @@ exports.getProjects = function(req, res) {
 };
 
 exports.getProject = function(req, res) {
-    console.log(req.params.id);
-    Version.find({
-        _project: req.params.id
-    })
-        .sort('created')
-        .exec(function(err, versions) {
-            console.log(err, versions);
-            Project.findOne(function(err, project) {
-                if (err) {
-                    return res.send(500, err);
-                }
-                res.render('manage/project', {
-                    title: project.name + ' Project',
-                    project: project,
-                    versions: versions,
-                    standalone: false
-                });
-            });
-        });
+	console.log(req.params.id);
+	Version.find({
+		_project: req.params.id
+	})
+		.sort('created')
+		.exec(function(err, versions) {
+			console.log(err, versions);
+			Project.findOne(function(err, project) {
+				if (err) {
+					return res.send(500, err);
+				}
+				res.render('manage/project', {
+					title: project.name + ' Project',
+					project: project,
+					versions: versions,
+					standalone: false
+				});
+			});
+		});
 };
 
 //TODO uploadApp should accept a project id
 // and do either createProject or _updateProject
 exports.uploadApp = function(req, res) {
-    if (!req.files || !req.files.zip || !req.files.zip.path) {
-	return res.send(400, 'Bad upload');
-    }
-    var userId = req.user;
-    owaReader(req.files.zip.path, function(err, projectName, version) {
-	if (err) {
-	    console.log(err);
-	    console.error(err);
-	    return res.send(404, 'Unable to read app zip');
+	if (!req.files || !req.files.zip || !req.files.zip.path) {
+		return res.send(400, 'Bad upload');
 	}
-	_createProject(projectName, userId, version, function(err, newProject, newVersion) {
-	    if (err) {
-		console.log(err);
-		console.error(err);
-		return res.send(500, 'Unable to save to Mongo');
-	    }
-	    fs.mkdir(path.join(os.tmpdir(), 'd2g-signed-packages'), function(err) {
-		if (err) console.log('d2g mkdir err=', err);
-		var signedPackage = path.join(os.tmpdir(), 'd2g-signed-packages', newProject.id + '.zip');
-		// TODO Issue#25 compare version to newVersion.version
-		keygen.signAppPackage(unsignedPackage, signedPackage, function(exitCode) {
-		    var project = newProject.toObject();
-		    project.version = newVersion.toObject();
-		    res.send(project);
-		});
+	var userId = req.user;
+	owaReader(req.files.zip.path, function(err, projectName, version) {
+		if (err) {
+			console.log(err);
+			console.error(err);
+			return res.send(404, 'Unable to read app zip');
+		}
+		_createProject(projectName, userId, version, function(err, newProject, newVersion) {
+			if (err) {
+				console.log(err);
+				console.error(err);
+				return res.send(500, 'Unable to save to Mongo');
+			}
+			fs.mkdir(path.join(os.tmpdir(), 'd2g-signed-packages'), function(err) {
+				if (err) console.log('d2g mkdir err=', err);
+				var signedPackage = path.join(os.tmpdir(), 'd2g-signed-packages', newProject.id + '.zip');
+				// TODO Issue#25 compare version to newVersion.version
+				keygen.signAppPackage(unsignedPackage, signedPackage, function(exitCode) {
+					var project = newProject.toObject();
+					project.version = newVersion.toObject();
+					res.send(project);
+				});
 
-	    });
+			});
+		});
 	});
-    });
 };
 
 var _createProject = function(projectName, userId, version, cb) {
@@ -112,4 +112,3 @@ var _createProject = function(projectName, userId, version, cb) {
 		});
 	});
 }
-
