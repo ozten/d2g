@@ -8,6 +8,7 @@ var versionSchema = new mongoose.Schema({
 	},
 	signedPackagePath: String,
 	manifest: String,
+	packagePath: String,
 	created: {
 		type: Date,
 		default: Date.now

@@ -1,4 +1,4 @@
-{
+        {
   "name": "hackathon-starter",
   "version": "0.0.0",
   "scripts": {
@@ -11,6 +11,7 @@
     "express": "3.4.x",
     "express-flash": "0.0.x",
     "express-validator": "1.0.x",
+    "fs.extra": "1.2.x",
     "github-api": "0.7.x",
     "jade": "1.2.x",
     "less": "1.7.x",

@@ -1,4 +1,13 @@
 'use strict';
+
+var connect = require('connect');
+var fresh = require('fresh');
+var fs = require('fs');
+var moment = require('moment');
+var mongoose = require('mongoose');
+var prettyBytes = require('pretty-bytes');
+var spawn = require('child_process').spawn;
+
 /**
  * GET /
  * Home page.
@@ -7,13 +16,7 @@
 var config = require('../config/config');
 var Project = require('../models/project');
 var Version = require('../models/version');
-var fs = require('fs');
-var connect = require('connect');
-var fresh = require('fresh');
-var mongoose = require('mongoose');
-var moment = require('moment');
-var prettyBytes = require('pretty-bytes');
-var spawn = require('child_process').spawn;
+var stripBOM = require('../lib/utils').stripBOM;
 
 exports.getIndex = function(req, res) {
 	if (req.user) {
@@ -43,8 +46,8 @@ exports.getInstall = function(req, res) {
 			if (err || !project) {
 				return res.send(404);
 			}
-
-			var size = fs.statSync(project._version.signedPackagePath).size;
+                        console.log(project._version);
+			var size = fs.statSync(project._version.packagePath).size;
 
 			res.render('install', {
 				title: project.name,
@@ -74,7 +77,12 @@ exports.getManifest = function(req, res) {
 			}
 
 			var size = fs.statSync(project._version.signedPackagePath).size;
-			var manifest = JSON.parse(project._version.manifest);
+			var manifest;
+			try {console.log(project._version);
+				manifest = JSON.parse(stripBOM(project._version.manifest));
+			} catch(e) {
+				return res.send(e.toString(), 500);
+			}
 			manifest.package_path = '/install/' + project._id + '/package';
 			manifest.size = size;
 			var icons = manifest.icons || {
@@ -126,7 +134,12 @@ exports.getIcon = function(req, res) {
 				return;
 			}
 
-			var manifest = JSON.parse(project._version.manifest);
+                        var manifest;
+			try {
+				manifest = JSON.parse(stripBOM(project._version.manifest));
+			} catch(e) {
+				return res.send(e.toString(), 500);
+			}
 
 			var icons = manifest.icons;
 			var biggestSize = 0,
