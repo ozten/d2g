@@ -31,6 +31,7 @@ exports.getProjects = function(req, res) {
 //TODO uploadApp should accept a project id
 // and do either createProject or _updateProject
 exports.uploadApp = function(req, res) {
+console.log('uploadApp called!');
 	if (!req.files || !req.files.zip || !req.files.zip.path) {
 		return res.send(400, 'Bad upload');
 	}
