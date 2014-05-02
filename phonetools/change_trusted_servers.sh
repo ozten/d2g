@@ -34,7 +34,7 @@ echo "pref(\"dom.mozApps.signed_apps_installable_from\",\"$servers\");" >> user.
 
 #update prefs - remount file system as readwrite, push file, remount file system as readonly, reboot
 adb shell mount -o rw,remount /system 
-adb push ~/Downloads/user.js /system/b2g/defaults/pref/user.js 
+adb push user.js /system/b2g/defaults/pref/user.js 
 adb shell mount -o ro,remount /system 
 adb reboot
 
