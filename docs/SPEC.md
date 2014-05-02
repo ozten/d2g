@@ -19,7 +19,7 @@ d2g services two main audiences
 A developer signs into d2g with Persona.
 
 A developer uploads their privileged app (zip file) which
-creates or updates a project.
+creates or updates a project. The service signs the privileged app.
 
 A developer shares the install link to the latest version of their app
 with their beta testers via their email client or other communication
@@ -44,10 +44,22 @@ A beta tester reverts provisioning their phone to be a production device.
 
 A beta tester can browse the homepage, which links to the most recent install pages.
 
+## Metrics
+
+The system will capture how many installs for each app as number of installs globally.
+
 ## Out of Scope for 1.0
 
 In the future, d2g could manage versions of apps.
+[ Alternative, testing upgrade cycles multiple times makes this a 1.0 feature. ]
 
 In the future, d2g could provide private apps and manage the list of email addresses of beta testers.
+[ Alternative, maybe seperate deployments with simple authentication ]
 
-In the future, FirefoxOS could provide an API to install certificates. D2G could use this to make provisioning work without tethering over USB.
+
+In the future, FirefoxOS could provide an API to install certificates. D2G could use this to make provisioning work without tethering over USB. It allows for testing without jailbreaking the phone. 
+[ Open active bug on reviewer process ]
+
+In the future, d2g works for Android Apps too.
+
+As developer, I want to know how many beta testers have upgraded
