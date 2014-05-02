@@ -1,3 +1,8 @@
+Obsolete!!! Read d2g/README.md
+
+----------------------------------------
+
+
 This directory contains scripts for customizing the certificate trust database
 so that additional app stores can be added *for testing purposes only*. Gecko
 does not properly support multiple app stores signing privileged apps, so these
@@ -10,7 +15,7 @@ Example usage:
   ./new_certdb.sh certdb.tmp
   ./add_or_replace_root_cert.sh certdb.tmp root-ca-reviewers-marketplace
   ./change_trusted_servers.sh full_unagi \
-         "https://marketplace-dev.allizom.org,https://marketplace.allizom.org,https://marketplace.firefox.com"
+         "https://marketplace-dev.allizom.org,https://marketplace.allizom.org,https://marketplace.firefox.com". 
   ./push_certdb.sh full_unagi certdb.tmp
 
 If you want to add marketplace-dev support, add one or both of these before
@@ -46,3 +51,11 @@ Windows:
    # NSS/bin must be ahead of the rest of the path because NSS and Windows both
    # have tools called "certutil".
    export PATH=$NSS/bin:$NSS/lib:$PATH
+
+TODO: Document
+* check_device.sh
+* configure-2-distribute-2-gecko.sh
+* find_device_name.sh
+* pull_certdb.sh
+* push_certdb.sh
+
